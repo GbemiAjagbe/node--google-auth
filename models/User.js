@@ -1,27 +1,27 @@
-const mongoose = require('mongoose')
+const mongoose = require ('mongoose')
 
 const UserSchema = new mongoose.Schema({
-    googleId: {
+    googleId :{
         type: String,
         required: true
     },
-    displayName: {
+    displayName :{
         type: String,
         required: true
     },
-    firstName: {
+    firstName :{
         type: String,
         required: true
     },
-    lastName: {
+    lastName :{
         type: String,
         required: true
     },
-    image: {
+    image :{
         type: String
     },
     createdAt: {
-        type:Date,
+        type: Date,
         default: Date.now
     }
 })

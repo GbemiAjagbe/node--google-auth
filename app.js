@@ -5,8 +5,8 @@ const morgan = require('morgan')
 const connectDB = require('./config/db')
 const passport = require ('passport')
 const session = require ('express-session')
-const MongoStore = require('connect-mongo')(session)
-const login = require('./routes/login')
+const MongoStore = require('connect-mongo')
+const homepage = require('./routes/homepage')
 const auth = require('./routes/auth')
 
 //Load config
@@ -20,29 +20,30 @@ connectDB()
 const app = express()
 
 
-//Logging with Morgan
+//logging with Morgan
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'))
 }
 
-//sessions middleware
+//Sessions
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI
+    })
 }))
+
 
 //Passport middleware
 app.use(passport.initialize())
 app.use(passport.session())
 
 //Routes
-app.use(login)
+app.use(homepage)
 app.use(auth)
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000
 
-app.listen(PORT, 
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-)
+app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}` ))
